@@ -1,82 +1,39 @@
-"use client";
-import { useState, useEffect } from "react";
 import { getMoviesApiFetch } from "@/services/moviesApi";
 import CardMovie from "./_components/CardMovie";
+import Link from "next/link";
 
-export default function Home() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!search) {
-      setData(null);
-      return;
-    }
-    setLoading(true);
-    getMoviesApiFetch(search, page).then((res) => {
-      setData(res);
-      setLoading(false);
-    });
-  }, [search, page]);
-
-  // Reset search and page on mount (navigation)
-  useEffect(() => {
-    setSearch("");
-    setPage(1);
-  }, []);
+export default async function Home() {
+  const data = await getMoviesApiFetch("action", 1);
+  const previewMovies = data.Search?.slice(0, 6) || [];
 
   return (
     <main className="container mx-auto p-4">
-      <div className="flex justify-center mb-6">
-        <input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-60 md:w-96"
-          placeholder="Search for movies..."
-        />
-      </div>
-      {loading && <div className="text-center">Loading...</div>}
-      {!search && (
-        <div className="text-center text-gray-500">
-          Type a movie name to search.
+      <section className="flex flex-col items-center justify-center text-center py-12 mb-8 bg-gradient-to-r from-blue-50 to-indigo-100 rounded-xl shadow">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900">
+          Welcome to <span className="text-blue-600">Movie Explorer</span>
+        </h1>
+        <p className="text-lg md:text-xl mb-8 max-w-2xl text-gray-600">
+          Discover, search, and explore your favorite movies. Browse a few
+          popular picks below, or click to see more!
+        </p>
+        <Link
+          href="/movies"
+          className="inline-block px-8 py-3 rounded-full bg-blue-600 text-white font-bold text-lg shadow hover:bg-blue-700 transition-all duration-300"
+        >
+          Explore All Movies
+        </Link>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-6 text-center text-blue-400">
+          Popular Picks
+        </h2>
+        <div className="flex gap-6 flex-wrap items-center justify-center">
+          {previewMovies.map((movie: any) => (
+            <CardMovie movie={movie} key={movie.imdbID} />
+          ))}
         </div>
-      )}
-      {data?.error && (
-        <div className="text-center text-red-600 bg-red-50 border border-red-200 rounded p-4 max-w-xl mx-auto">
-          {data.error}
-        </div>
-      )}
-      {data?.Search && data.Search.length > 0 && (
-        <>
-          <div className="flex gap-6 flex-wrap items-center justify-center">
-            {data.Search.map((movie: any) => (
-              <CardMovie movie={movie} key={movie.imdbID} />
-            ))}
-          </div>
-          <div className="flex justify-center mt-8 gap-4">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2">{page}</span>
-            <button
-              onClick={() => setPage((p) => p + 1)}
-              disabled={data.Search.length < 10}
-              className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
-        </>
-      )}
+      </section>
     </main>
   );
 }
