@@ -1,5 +1,6 @@
 import { getMovieApiFetch } from "@/services/moviesApi";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Home({ params }: { params: { slug: string } }) {
   console.log(params);
@@ -10,10 +11,17 @@ export default async function Home({ params }: { params: { slug: string } }) {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-10">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         <div className="md:w-1/3 flex items-center justify-center bg-gray-100 p-6">
-          <img
-            src={data?.Poster}
+          <Image
+            src={
+              data?.Poster && data.Poster !== "N/A"
+                ? data.Poster
+                : "/placeholder.png"
+            }
             alt={data?.Title}
-            className="rounded-xl w-60 h-auto shadow-lg border border-gray-200"
+            width={240}
+            height={360}
+            className="rounded-xl object-cover w-60 h-auto shadow-lg border border-gray-200"
+            priority
           />
         </div>
         <div className="md:w-2/3 p-8 flex flex-col justify-between">
@@ -62,7 +70,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
                 <span className="font-semibold">Awards:</span> {data?.Awards}
               </div>
               <div>
-                <span className="font-semibold">Metascore:</span>{" "}
+                <span className="font-semibold">Metascore:</span>
                 {data?.Metascore}
               </div>
               <div>

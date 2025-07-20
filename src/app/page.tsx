@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="min-h-[60vh] flex flex-col items-center justify-center bg-white">
+    <section className="min-h-[90vh] flex flex-col items-center justify-center bg-white overflow-hidden">
       <div className="flex flex-col items-center text-center px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900 animate-fade-in">
           Welcome to <span className="text-blue-600">Movie Explorer</span>

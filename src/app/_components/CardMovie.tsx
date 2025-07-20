@@ -6,7 +6,6 @@ import Link from "next/link";
 type Props = { movie: Movie };
 
 const CardMovie = ({ movie }: Props) => {
-  // Use a fallback image if Poster is 'N/A'
   const posterSrc =
     movie?.Poster && movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png";
 
