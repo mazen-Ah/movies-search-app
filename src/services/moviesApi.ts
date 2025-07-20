@@ -1,8 +1,10 @@
+import { MovieList } from "@/types/moviesTypes";
+
 const API_URL = "https://www.omdbapi.com/";
 const API_KEY = "6c864312"; 
 
 
-async function fetchFromApi(params: Record<string, string>) {
+async function fetchFromApi(params: Record<string, string>): Promise<any> {
   try {
     const query = new URLSearchParams({ apikey: API_KEY, ...params }).toString();
     const res = await fetch(`${API_URL}?${query}`);
@@ -19,11 +21,11 @@ async function fetchFromApi(params: Record<string, string>) {
 }
 
 
-export async function getMoviesApiFetch(search: string, page: number) {
+export async function GetMoviesList(search: string, page: number) {
   return fetchFromApi({ s: search, page: page.toString() });
 }
 
 
-export async function showMovieDetails(slug: string) {
+export async function GetMovie(slug: string) {
   return fetchFromApi({ t: slug });
 }

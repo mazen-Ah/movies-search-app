@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getMoviesApiFetch } from "@/services/moviesApi";
+import { GetMoviesList } from "@/services/moviesApi";
 import { useDebounce } from "./useDebounce";
 
 export function useMoviesSearch(search: string, page: number) {
@@ -13,7 +13,7 @@ export function useMoviesSearch(search: string, page: number) {
       return;
     }
     setLoading(true);
-    getMoviesApiFetch(debounced, page).then((res) => {
+    GetMoviesList(debounced, page).then((res) => {
       setData(res);
       setLoading(false);
     });

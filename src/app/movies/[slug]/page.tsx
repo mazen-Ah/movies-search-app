@@ -1,4 +1,4 @@
-import { showMovieDetails } from "@/services/moviesApi";
+import { GetMovie } from "@/services/moviesApi";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ export default async function Home({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = await showMovieDetails(slug);
+  const data = await GetMovie(slug);
   console.log(data);
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-10">
