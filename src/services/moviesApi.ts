@@ -6,7 +6,6 @@
   const data = await response.json();
   if (data.Response !== "True" ) return { message: "No results found for your search. Please try a different keyword." } 
   if (!response.ok) return { message: "Sorry, something went wrong. Please try again later." }
-  console.log(data);
   return data;
 };
 
@@ -17,7 +16,6 @@ export const getMovieApiFetch = async (type:string,page:number,title:string) => 
     const data = await response.json();
     if (data.Response !== "True" ) return { message: "No results found for your search. Please try a different keyword." } 
     if (!response.ok) return { message: "Sorry, something went wrong. Please try again later." }
-    console.log(data);
     return data;
   };
 
