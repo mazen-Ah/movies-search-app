@@ -2,11 +2,13 @@
 import { useState } from "react";
 import { useMoviesSearch } from "@/hooks/useMoviesSearch";
 import ListCardsMovie from "../_components/ListCardsMovie";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Home() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const { data, loading } = useMoviesSearch(search, page);
+  const debounced = useDebounce(search, 400);
+  const { data, loading } = useMoviesSearch(debounced, page);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
