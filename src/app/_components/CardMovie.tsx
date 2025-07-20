@@ -11,7 +11,7 @@ const CardMovie = ({ movie }: Props) => {
 
   return (
     <Link
-      href={`${movie?.Title?.replaceAll(" ", "-").toLowerCase()}`}
+      href={`/movies/${movie?.Title?.replaceAll(" ", "-").toLowerCase()}`}
       key={movie?.imdbID}
       className="flex flex-col items-center gap-2 bg-white/90 rounded-xl shadow-md p-4 transition-transform hover:-translate-y-1 hover:shadow-xl hover:bg-blue-50 w-[220px] h-[380px] min-w-[220px] min-h-[380px] max-w-[220px] max-h-[380px]"
     >
