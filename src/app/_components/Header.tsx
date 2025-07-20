@@ -5,32 +5,15 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Header = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const debounced = useDebounce(search, 400);
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    debounced ? params.set("search", search) : params.delete("search");
-    router.replace(`?${params}`, { scroll: false });
-  }, [debounced]);
-
   return (
-    <header className="sticky top-0 z-20 w-full bg-white/90 backdrop-blur shadow-sm rounded-b-xl mb-6">
+    <header className="sticky top-0 z-20 w-full bg-white/90 backdrop-blur shadow-sm rounded-b-xl ">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
         <Link
           href="/"
-          className="flex items-center text-xs font-bold text-blue-700 hover:text-blue-900 transition select-none "
+          className="flex items-center text-lg font-bold text-blue-700 hover:text-blue-900 transition select-none "
         >
           Movie Explorer
         </Link>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-60 md:w-64 ml-2"
-          placeholder="Search..."
-        />
       </div>
     </header>
   );
