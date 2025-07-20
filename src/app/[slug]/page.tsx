@@ -3,8 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default async function Home({ params }: { params: { slug: string } }) {
-  console.log(params);
-  console.log(params.slug);
   const data = await getMovieApiFetch("", 1, params.slug);
   console.log(data);
   return (
