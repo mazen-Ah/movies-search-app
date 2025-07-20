@@ -1,9 +1,9 @@
-import { getMoviesApiFetch } from "@/services/moviesApi";
+import { GetMoviesList } from "@/services/moviesApi";
 import CardMovie from "./_components/CardMovie";
 import Link from "next/link";
 
 export default async function Home() {
-  const data = await getMoviesApiFetch("action", 1);
+  const data = await GetMoviesList("action", 1);
   const previewMovies = data.Search?.slice(0, 6) || [];
 
   return (
