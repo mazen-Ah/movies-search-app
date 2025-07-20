@@ -1,21 +1,41 @@
-
-  export const getMoviesApiFetch = async (type:string,page:number) => {
-  const response = await fetch(
-    `http://www.omdbapi.com/?s=${type}&page=${page}&apikey=6c864312`
-  );
-  const data = await response.json();
-  if (data.Response !== "True" ) return { message: "No results found for your search. Please try a different keyword." } 
-  if (!response.ok) return { message: "Sorry, something went wrong. Please try again later." }
-  return data;
-};
-
-export const getMovieApiFetch = async (type:string,page:number,title:string) => {
-    const response = await fetch(
-      `http://www.omdbapi.com/?s=${type}&page=${page}&apikey=6c864312&t=${title}`
-    );
-    const data = await response.json();
-    if (data.Response !== "True" ) return { message: "No results found for your search. Please try a different keyword." } 
-    if (!response.ok) return { message: "Sorry, something went wrong. Please try again later." }
+const API_URL = "https://www.omdbapi.com/";
+const API_KEY = "6c864312";
+    
+export async function getMoviesApiFetch(search: string, page: number) {
+  try {
+    const res = await fetch(`${API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(search)}&page=${page}`);
+    const data = await res.json();
+    if (data.Error) {
+      return { error: data.Error };
+    }
+    if (!res.ok) {
+      if (res.status === 429) {
+        return { error: "Too many requests. Please try again later." };
+      }
+      return { error: "Something went wrong. Please try again later." };
+    }
     return data;
-  };
+  } catch (error) {
+    return { error: "Something went wrong. Please try again later." };
+  }
+}
+
+export async function getMovieApiFetch(search: string, page: number, slug: string) {
+  try {
+    const res = await fetch(`${API_URL}?apikey=${API_KEY}&t=${encodeURIComponent(slug)}&page=${page}`);
+    const data = await res.json();
+    if (data.Error) {
+      return { error: data.Error };
+    }
+    if (!res.ok) {
+      if (res.status === 429) {
+        return { error: "Too many requests. Please try again later." };
+      }
+      return { error: "Something went wrong. Please try again later." };
+    }
+    return data;
+  } catch (error) {
+    return { error: "Something went wrong. Please try again later." };
+  }
+}
 

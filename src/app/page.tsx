@@ -9,6 +9,7 @@ export default async function Home({
 }) {
   const { search } = await searchParams;
   const data = await getMoviesApiFetch(search || "", 1);
+  console.log(data);
 
   return (
     <main className="flex gap-6 flex-wrap items-center justify-center container mx-auto p-4">

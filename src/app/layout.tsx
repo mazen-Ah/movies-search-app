@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Movie Explorer",
   description:
     "Discover, search, and explore your favorite movies with Movie Explorer. Powered by OMDb API.",
