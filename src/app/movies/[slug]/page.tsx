@@ -1,7 +1,24 @@
 import { getMovie } from "@/services/moviesApi";
 import Link from "next/link";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const movieData = await getMovie(slug);
+  return {
+    title: movieData?.Title
+      ? `${movieData.Title} - Movie Explorer`
+      : "Movie Explorer",
+    description:
+      movieData?.Plot ||
+      "Discover detailed information about your favorite movies.",
+  };
+};
 export default async function Movie({
   params,
 }: {
@@ -9,6 +26,9 @@ export default async function Movie({
 }) {
   const { slug } = await params;
   const data = await getMovie(slug);
+  if (!data || data?.Error) {
+    notFound();
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-10">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
@@ -17,9 +37,9 @@ export default async function Movie({
             src={
               data?.Poster && data?.Poster !== "N/A"
                 ? data?.Poster
-                : "/placeholder.png"
+                : "https://placehold.co/180x260?text=No+Image"
             }
-            alt={data?.Title}
+            alt={data?.Title || "alt"}
             width={240}
             height={360}
             className="rounded-xl object-cover w-60 h-auto shadow-lg border border-gray-200"

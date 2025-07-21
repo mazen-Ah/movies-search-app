@@ -1,6 +1,6 @@
 
-const API_URL = "https://www.omdbapi.com/";
-const API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY || "6c864312"; // Fallback for demo
+const API_URL = process.env.NEXT_PUBLIC_OMDB_API || "https://www.omdbapi.com/";
+const API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY || "6c864312"; 
 
 async function fetchFromApi(params: Record<string, string>): Promise<any> {
   try {

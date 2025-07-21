@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { getMoviesList } from "@/services/moviesApi";
-import { useDebounce } from "./useDebounce";
+import type { MoviesApiResponse } from "@/types/moviesTypes";
 
 export function useMoviesSearch(search: string, page: number) {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<MoviesApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,4 +19,4 @@ export function useMoviesSearch(search: string, page: number) {
   }, [search, page]);
 
   return { data, loading };
-} 
+}

@@ -1,20 +1,31 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMoviesSearch } from "@/hooks/useMoviesSearch";
 import ListCardsMovie from "../_components/ListCardsMovie";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useRouter, useSearchParams } from "next/navigation";
+import SkeletonCard from "../_components/SkeletonCard";
 
-export default function Home() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const debounced = useDebounce(search, 400);
+export default function Movies() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const debounced = useDebounce(search, 1000);
   const { data, loading } = useMoviesSearch(debounced, page);
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (debounced) params.set("q", debounced);
+    if (page > 1) params.set("page", String(page));
+    router.replace(`?${params.toString()}`, { scroll: false });
+  }, [debounced, page, router]);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
+    setSearch(e.target.value);
     setPage(1);
   };
+
   return (
     <main className="container mx-auto p-4">
       <div className="flex justify-center mb-6">
@@ -25,7 +36,7 @@ export default function Home() {
           placeholder="Search for movies..."
         />
       </div>
-      {/* {loading && <div className="text-center">Loading...</div>} */}
+
       {!search && (
         <div className="text-center text-gray-500">
           Type a movie name to search.
@@ -36,8 +47,17 @@ export default function Home() {
           {data.error}
         </div>
       )}
-      {data?.Search && data.Search.length > 0 && (
-        <ListCardsMovie data={data} page={page} setPage={setPage} />
+      {loading ? (
+        <div className="flex gap-6 flex-wrap items-center justify-center">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      ) : (
+        data?.Search &&
+        data.Search.length > 0 && (
+          <ListCardsMovie data={data} page={page} setPage={setPage} />
+        )
       )}
     </main>
   );

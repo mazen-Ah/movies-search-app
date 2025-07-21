@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Movie Explorer",
@@ -16,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` container`}>
+      <body className={`${poppins.variable} font-sans`}>
         <Header />
         {children}
       </body>
