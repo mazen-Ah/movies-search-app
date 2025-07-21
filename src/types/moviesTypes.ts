@@ -7,3 +7,10 @@ export type Movie = {
   };
   
   export type MovieList = Movie[];
+
+export type MoviesApiResponse = {
+  Search: Movie[];
+  totalResults: string;
+  Response: string;
+  error?: string;
+};

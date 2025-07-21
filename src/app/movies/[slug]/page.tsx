@@ -1,26 +1,45 @@
-import { GetMovie } from "@/services/moviesApi";
+import { getMovie } from "@/services/moviesApi";
 import Link from "next/link";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
-export default async function Home({
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const movieData = await getMovie(slug);
+  return {
+    title: movieData?.Title
+      ? `${movieData.Title} - Movie Explorer`
+      : "Movie Explorer",
+    description:
+      movieData?.Plot ||
+      "Discover detailed information about your favorite movies.",
+  };
+};
+export default async function Movie({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = await GetMovie(slug);
-  console.log(data);
+  const data = await getMovie(slug);
+  if (!data || data?.Error) {
+    notFound();
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-10">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         <div className="md:w-1/3 flex items-center justify-center bg-gray-100 p-6">
           <Image
             src={
-              data?.Poster && data.Poster !== "N/A"
-                ? data.Poster
-                : "/placeholder.png"
+              data?.Poster && data?.Poster !== "N/A"
+                ? data?.Poster
+                : "https://placehold.co/180x260?text=No+Image"
             }
-            alt={data?.Title}
+            alt={data?.Title || "alt"}
             width={240}
             height={360}
             className="rounded-xl object-cover w-60 h-auto shadow-lg border border-gray-200"
@@ -80,11 +99,11 @@ export default async function Home({
                 <span className="font-semibold">IMDB:</span> {data?.imdbRating}{" "}
                 ({data?.imdbVotes} votes)
               </div>
-              {data?.Ratings && data?.Ratings.length > 0 && (
+              {data?.Ratings && data?.Ratings?.length > 0 && (
                 <div>
                   <span className="font-semibold">Ratings:</span>
                   <ul className="list-disc list-inside ml-4">
-                    {data?.Ratings.map((rating: any, idx: number) => (
+                    {data?.Ratings?.map((rating: any, idx: number) => (
                       <li key={idx}>
                         {rating?.Source}: {rating?.Value}
                       </li>

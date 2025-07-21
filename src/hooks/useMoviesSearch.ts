@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react";
-import { GetMoviesList } from "@/services/moviesApi";
-import { useDebounce } from "./useDebounce";
+import { getMoviesList } from "@/services/moviesApi";
+import type { MoviesApiResponse } from "@/types/moviesTypes";
 
 export function useMoviesSearch(search: string, page: number) {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<MoviesApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const debounced = useDebounce(search, 400);
 
   useEffect(() => {
-    if (!debounced) {
+    if (!search) {
       setData(null);
       return;
     }
     setLoading(true);
-    GetMoviesList(debounced, page).then((res) => {
+    getMoviesList(search, page).then((res) => {
       setData(res);
       setLoading(false);
     });
-  }, [debounced, page]);
+  }, [search, page]);
 
   return { data, loading };
-} 
+}

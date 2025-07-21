@@ -1,8 +1,6 @@
-import { MovieList } from "@/types/moviesTypes";
 
-const API_URL = "https://www.omdbapi.com/";
-const API_KEY = "6c864312"; 
-
+const API_URL = process.env.NEXT_PUBLIC_OMDB_API || "https://www.omdbapi.com/";
+const API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY || "6c864312"; 
 
 async function fetchFromApi(params: Record<string, string>): Promise<any> {
   try {
@@ -20,12 +18,10 @@ async function fetchFromApi(params: Record<string, string>): Promise<any> {
   }
 }
 
-
-export async function GetMoviesList(search: string, page: number) {
+export async function getMoviesList(search: string, page: number) {
   return fetchFromApi({ s: search, page: page.toString() });
 }
 
-
-export async function GetMovie(slug: string) {
+export async function getMovie(slug: string) {
   return fetchFromApi({ t: slug });
 }
